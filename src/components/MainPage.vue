@@ -77,7 +77,7 @@
       }
     }, 
     mounted() {
-      this.loadPage('connect');
+      this.loadPage('home');
     }
   }
 </script>
