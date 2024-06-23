@@ -4,7 +4,7 @@
       <div class="m-lt-list">
         <!-- 个人栏 -->
         <div class="m-lt-person">
-          <img src="../../img\person.svg" class="rounded-circle" alt="Cinque Terre" width="150">
+          <img src="/img/person.svg" class="rounded-circle" alt="Cinque Terre" width="150">
           <div class="m-lt-per">
             <div class="m-lt-name">UnmooredZ</div>
             <div class="m-lt-sign">不系舟</div>
@@ -13,22 +13,22 @@
         <!-- 导航菜单 -->
         <div class="m-lt-title">导航</div>
         <div class="m-lt-card" v-for="item in menuItems" :key="item.name" @click="loadPage(item.url)">
-          <img :src="item.icon" class="svgshadow">
+          <img :src="`../${item.icon}`" class="svgshadow">
           {{ item.name }}
         </div>
         <!-- 分组菜单 -->
         <div class="m-lt-title">分组</div>
         <div class="m-lt-menu" v-for="group in groups" :key="group.id">
           <div class="m-lt-card collapsed" data-bs-toggle="collapse" :href="`#${group.id}`" @click="toggleImage(group.imgId)">
-            <img :src="`img\\${group.img}`" class="svgshadow">
+            <img :src="`../img/${group.img}`" class="svgshadow">
             {{ group.title }}
             <h class="open">
-              <img src="../../img\\left.svg" class="svgshadow" :id="group.imgId">
+              <img :src="'../img/left.svg'" class="svgshadow" :id="group.imgId">
             </h>
           </div>
           <div :id="group.id" class="collapse" data-bs-parent="#accordion">
             <div class="m-lt-card" v-for="item in group.items" :key="item.text" @click="loadPage(item.url)">
-              <img :src="`../../img\\${item.img}.svg`" class="svgshadow">
+              <img :src="`../img/${item.img}.svg`" class="svgshadow">
               {{ item.text }}
             </div>
           </div>
@@ -38,6 +38,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -46,10 +47,10 @@
     data() {
       return {
         menuItems: [
-          { name: ' 主页 ', icon: 'img\\home.svg', url: 'home' },
-          { name: ' 笔记 ', icon: 'img\\write.svg', url: 'note' },
-          { name: ' 联系 ', icon: 'img\\connect.svg', url: 'connect' },
-          { name: ' 投喂 ', icon: 'img\\reward.svg', url: 'reward' },
+          { name: ' 主页 ', icon: '../img/home.svg', url: 'home' },
+          { name: ' 笔记 ', icon: '../img/write.svg', url: 'note' },
+          { name: ' 联系 ', icon: '../img/connect.svg', url: 'connect' },
+          { name: ' 投喂 ', icon: '../img/reward.svg', url: 'reward' },
         ],
         groups: [
           { id: 'menuWeb', img: 'classify.svg', title: ' 更新日志', imgId: 'lt-img1', items: [
@@ -73,7 +74,7 @@
           { id: 'menuProject', img: 'boardmenu.svg', title: ' 实验', imgId: 'lt-img4', items: [
             {img: 'text', url: 'project/project1', text: '远程桌面&内网穿透' },
           ]},
-          { id: 'menuDaily', img: 'daily.svg', title: ' 日记', imgId: 'lt-img4',  items: [
+          { id: 'menuDaily', img: 'daily.svg', title: ' 日记', imgId: 'lt-img5',  items: [
           {img: 'daily', url: '404', text: '第一篇' },
           ]},
           { id: 'menuTwo', img: 'friend.svg', title: ' 友链', imgId: 'lt-img6',   items: [
@@ -88,8 +89,9 @@
       },
       toggleImage(imageId) {
         var x = document.getElementById(imageId);
-        x.src = x.src.match("img/left.svg") ? 'img/open.svg' : "img/left.svg";
+        x.src = x.src.match(`../img/left.svg`) ? `../img/open.svg` : `../img/left.svg`;
       },
+
     },
   };
 </script>

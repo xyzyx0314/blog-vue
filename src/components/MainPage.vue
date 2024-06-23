@@ -67,12 +67,12 @@
       },
       loadPage(pageId) {
         this.load();
-        this.xmlhttp.open("GET", "html/" + pageId + ".html", true);
+        this.xmlhttp.open("GET", "../../html/" + pageId + ".html", true);
         this.xmlhttp.send();
         if (pageId.startsWith('note/')) {
           pageId = 'note';
         }
-        this.xmlhttp2.open("GET", "html/" + pageId + "_list.html", true);
+        this.xmlhttp2.open("GET", "../../html/" + pageId + "_list.html", true);
         this.xmlhttp2.send();
       }
     }, 

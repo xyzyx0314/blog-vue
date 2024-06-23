@@ -1,10 +1,10 @@
 <template>
   <div class="m-rtbt" id="m-rtbt">
     <div class="backtop" @click="scrollToTop">
-      <img src="../../img/top.svg" class="svgshadow" />
+      <img src="/img/top.svg" class="svgshadow" />
     </div>
     <div class="moon" @click="toggleNightMode">
-      <img src="../../img/moon.svg" class="svgshadow" />
+      <img src="/img/moon.svg" class="svgshadow" />
     </div>
   </div>
 </template>
