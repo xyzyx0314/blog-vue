@@ -118,11 +118,11 @@
 .welcome {
   /* 本例12个文字(加标点符号)；有多少个文字，width就是多少个em */
   font-size: 30px;
-  width: 15em;
+  width: 20em;
   margin-left: 5%;
   /* 加上两个动画，一个是打字动画，使用steps让字一个一个的出现，
      注意step和字数保持一致，光标动画也是同理，*/
-  animation: typingWords 5s steps(15) 1, cursor 0.5s steps(1) infinite;
+  animation: typingWords 5s steps(20) 1, cursor 0.5s steps(1) infinite;
   /* 要设置不允许换行，且溢出隐藏 */
   white-space: nowrap;
   overflow: hidden;

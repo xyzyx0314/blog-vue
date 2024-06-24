@@ -1,0 +1,216 @@
+<body>
+    <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" class="scrollspy-example-2"
+        tabindex="0">
+        <div class="p-m">
+            <div class="p-top">
+                <div class="row">
+                    <div class="p-top-postion">
+                        <h class="p-top-link" data-page-id="home">Journey</h>
+                        /
+                        <h class="p-top-link" data-page-id="note">笔记</h>
+                        /
+                        <h class="p-top-link" data-page-id="note/noteWeb"> web </h>
+                        /
+                        <h class="p-top-link" data-page-id="blog/week8">博客更新8</h>
+                    </div>
+                </div>
+            </div>
+            <nav id="navbar-example3">
+                <a class="navbar-brand p-title2" href="#item" id="item">blog更新8:改写为Vue</a>
+                <a class="nav-link p-title5" href="#item-A">分块</a>
+                <a class="nav-link p-title5" href="#item-B">loadPage&事件总线</a>
+                <a class="nav-link p-title5" href="#item-C">新的Action&Dockerfile</a>
+                <a class="nav-link p-title5" href="#item-D">其他问题</a>
+                <a class="nav-link p-title5" href="#item-E">后续更新</a>
+            </nav>
+            <div class="p-word">
+                <div>
+                    之前计划的大更新，目前基本完成了，note(左侧笔记栏)相关的要重写，所以就暂时没怎么改动
+                </div>
+                <div>
+                    下面是一写更新细节
+                </div>
+            </div>
+            <div class="p-problem">
+                <div class="p-title3" id="item-A">分块</div>
+                <div class="p-word">
+                    <div>
+                        分块其实沿用了老版的代码，只是把代码放到了不同Vue的组件里，并且做了相应适配，这样就可以更好的管理代码了
+                    </div>
+                    <div>
+                        不得不说的是vue的v-if方便很多，相比之前js复杂的代码，左侧导航栏这次可读性高了许多
+                    </div>
+                </div>
+                <img src="img/week8/week8-1.svg" />
+                <div class="p-title3" id="item-B">loadPage&事件总线</div>
+                <div class="p-word">
+                    <div>
+                        在老版中可以直接调用loadPage()函数，因为是所以代码都在indedx.html内，但是在Vue中，都分散在各个组件中，虽然组件最后汇聚到App.vue再到了index.html内
+                    </div>
+                    <div>
+                        这就导致写在MainPage.vue的loadPage()函数无法直接调用，所以就用了事件总线，通过事件总线来调用loadPage()函数
+                    </div>
+                    <div>
+                        而ajax请求的可以说是纯粹的文本，使用不了事件总线，所以选择了直接监听鼠标点击位置的方法
+                    </div>
+                    <div>
+                        同样使用到了事件总线的还有锁屏功能，事实上是先实现了锁屏功能的事件总线，再去应用到了loadPage
+                    </div>
+                </div>
+                <img src="img/week8/week8-2.svg" />
+
+                <div class="p-title3" id="item-C">新的Action&Dockerfile</div>
+                <div class="p-word">
+                    <div>
+                        再v1.*版本有俩个不同的yml文库，一个是负责大的版本迭代，可以上传到docker，就有一个是负责小更新，直接与服务器docker内的文件做对比进行修改同步github的更新，但是这次选择了新的逻辑
+                    </div>
+                    <div>
+                        因为vue需要先构建的关系（这里还有一个坑在下文），所以无法直接与服务器的代码对比更改，试过啥组件都加载不出来了
+                    </div>
+                    <div>
+                        然而上传到docker这个方法，昨晚在更新的时候也不行（单纯只是华为云连不上docker hub，好吧手头所有设备都无法成功下载镜像，后面本地构建镜像也卡了几次）
+                    </div>
+                    <div>
+                        所有我们这次我们有了新的change.yml，同时因为用到了vue，所以我们的dockerfile也有了变化，代码分别如下
+                    </div>
+                </div>
+                <div class="p-code">
+                    <pre><code class="yml">name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - '**' # This will match all branches
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install project dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build
+
+    - name: Build Docker image
+      run: docker build -t vue-blog:latest .
+
+    - name: Save Docker image
+      run: docker save vue-blog:latest > image.tar
+
+    - name: Install sshpass
+      run: sudo apt-get install sshpass
+
+    - name: Create known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        touch ~/.ssh/known_hosts
+
+    - name: Add server to known hosts
+      run: ssh-keyscan 60.204.251.220 >> ~/.ssh/known_hosts
+
+    - name: Transfer image to server
+      run: |
+        sshpass -p ${{ secrets.SERVER_PASSWORD }} scp image.tar root@60.204.251.220:/tmp
+
+    - name: Load image and restart container on server
+      run: |
+        sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh root@60.204.251.220 "docker load < /tmp/image.tar && docker stop vueblog && docker rm vueblog && docker run -d --name vueblog -p 80:80 vue-blog:latest"
+
+                    </code></pre>
+                </div>
+                <div class="p-code">
+                    <pre><code class="docker"># 使用官方的node基础镜像
+FROM node:latest as build-stage
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制package.json和package-lock.json到工作目录
+COPY package*.json ./
+
+# 安装依赖
+RUN npm install
+
+# 复制项目文件到工作目录
+COPY . .
+
+# 构建项目
+RUN npm run build
+
+# 使用nginx镜像
+FROM nginx as production-stage
+
+# 将构建好的文件复制到nginx的html目录下
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# 暴露80端口
+EXPOSE 80
+
+# 启动nginx
+CMD ["nginx", "-g", "daemon off;"]
+
+                    </code></pre>
+                </div>
+
+                <div class="p-title3" id="item-D">其他问题</div>
+                <div class="p-word">
+                    <div>
+                        上文提到的因为要先构建，所以导致我的左侧导航栏的图片丢失（路径不正确，原来的路径都没了）
+                    </div>
+                    <div>
+                        尝试了一堆copilot的方法，什么publicPath之类的，都没用
+                    </div>
+                    <div>
+                        因为如果是一开始就写着的路径的图片是好的，但是左侧导航栏都是后续生成的路径，所以想着把生成的路径先写死的写一份，这样他们路径是一样的，应该就好了
+                    </div>
+                    <div>
+                        结果当然不行，那些写死的路径都会被修改掉的
+                    </div>
+                    <div>
+                        最后方法很简单粗暴，把那几个图片复制到了src文件夹下，这样就联的上了，public不行，不清楚构建完后public去哪里了，里面的那些html倒是可以和图片做出连接，因为在一个文件夹内
+                    </div>
+                    <div>
+                        哦，今早新问题，npm run dev后一切正常，但是浏览器上无法到页面，这就导致无法实时查看更新情况了
+                    </div>
+                </div>
+
+                <div class="p-title3" id="item-E">后续更新</div>
+                <div class="p-word">
+                    <div>
+                        后续有空了肯定是先处理note相关的，这个还没考虑好怎么做，因为想弄成类似左侧导航栏的自动生成，可能得用点隐藏什么的方法
+                    </div>
+                    <div>
+                        等note处理完就是找个后端语言连接数据库了，还没想好，算算时间估计就是rust了
+                    </div>
+                </div>
+
+            </div>
+   
+
+            <div class="p-bot">
+                <div class="p-date">
+                    <div>
+                        首次发布时间:2024年6月24日
+                    </div>
+                    <div>
+                        首次发布时间:2024年6月24日
+                    </div>
+                    <div>
+                        发布者:@不系舟UnmooredZ
+                    </div>
+                </div>
+            </div>
+            <div class="copyright colorfulword">Copyright © CKZ</div>
+        </div>
+    </div>
+</body>

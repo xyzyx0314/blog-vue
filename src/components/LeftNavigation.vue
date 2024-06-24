@@ -54,13 +54,14 @@
         ],
         groups: [
           { id: 'menuWeb', img: 'classify.svg', title: ' 更新日志', imgId: 'lt-img1', items: [
-            {img: 'text', url: 'blog/week1', text: 'web week 1' },
-            {img: 'text', url: 'blog/week2', text: 'web week 2' },
+            {img: 'text', url: 'blog/week8', text: 'Change 8:Vue' },
+            {img: 'text', url: 'blog/week7', text: 'Change 7' },
+            {img: 'text', url: 'blog/week6', text: 'Change 6' },
+            {img: 'text', url: 'blog/week5', text: 'Change 5' },
             {img: 'text', url: 'blog/week3', text: 'web week 3' },
             {img: 'text', url: 'blog/week4', text: 'web week 4' },
-            {img: 'text', url: 'blog/week5', text: 'Change 5' },
-            {img: 'text', url: 'blog/week6', text: 'Change 6' },
-            {img: 'text', url: 'blog/week7', text: 'Change 7' },
+            {img: 'text', url: 'blog/week2', text: 'web week 2' },
+            {img: 'text', url: 'blog/week1', text: 'web week 1' },
           ]},
           { id: 'menuNote', img: 'note.svg', title: ' ACM', imgId: 'lt-img2', items: [
             {img: 'answer', url: 'acm/cf1820', text: 'Codeforces Round 866 (Div. 2)' },
