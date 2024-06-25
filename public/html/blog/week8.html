@@ -22,6 +22,8 @@
                 <a class="nav-link p-title5" href="#item-C">新的Action&Dockerfile</a>
                 <a class="nav-link p-title5" href="#item-D">其他问题</a>
                 <a class="nav-link p-title5" href="#item-E">后续更新</a>
+                <a class="nav-link p-title5" href="#item-F">note页面</a>
+                <a class="nav-link p-title5" href="#item-G">后续更新2</a>
             </nav>
             <div class="p-word">
                 <div>
@@ -194,6 +196,32 @@ CMD ["nginx", "-g", "daemon off;"]
                     </div>
                 </div>
 
+                <div class="p-title3" id="item-F">note页面</div>
+                <div class="p-word">
+                    <div>
+                        还是抽空把note页面写了一下，主要还是背八股太累了，不如这个反馈来的迅速
+                    </div>
+                    <div>
+                        note这边直接写了个NotePage.vue，通过filteredNotes()来控制显示，默认是所以note都显示，点击左侧导航栏的时候，就会调用setCurrentGroup()，然后就会显示对应的note
+                    </div>
+                    <div>
+                        效果挺好，也比较满意，就是之后实现NoteOage和MainPage转换方面出了点问题，事件总线那边就是监听出问题，加上发现之前写的锁屏也有问题（锁屏后解锁，原来浏览的就没了，直接是home页面了），所以更换了一个思路，直接选择了与锁屏的时间一个逻辑的是否显示
+                    </div>
+                    <div>
+                        感觉home.html之后也可以换成类似NotePage.vue的逻辑，这样子home下面的推荐笔记就可以自动生成比如最新的10篇。
+                    </div>
+
+                </div>
+
+                <div class="p-title3" id="item-G">后续更新2</div>
+                <div class="p-word">
+                    <div>
+                        那么后续有的话肯定是连数据库了，其实也挺快，之前实现过了nest的增删改查，感觉直接搬过来改一下就好
+                    </div>
+                    <div>
+                        博客发布功能，如果要写，感觉会另外写一个，然后只运行在本地，既安全有安全，但是实用性我不好说
+                    </div>
+                </div>
             </div>
    
 

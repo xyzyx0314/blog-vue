@@ -13,7 +13,7 @@
         <!-- 导航菜单 -->
         <div class="m-lt-title">导航</div>
         <div class="m-lt-card" v-for="item in menuItems" :key="item.name" @click="loadPage(item.url)">
-          <img :src="`../${item.icon}`" class="svgshadow">
+          <img :src="`../${item.icon}`" class="svgshadow"/>
           {{ item.name }}
         </div>
         <!-- 分组菜单 -->
@@ -86,7 +86,12 @@
     },
     methods: {
       loadPage(pageId) {
-        EventBus.emit('loadPage', pageId);
+        if (pageId==='note') {
+          EventBus.emit('show-note');
+        } else {
+          EventBus.emit('close-note');
+          EventBus.emit('loadPage', pageId);
+        }
       },
       toggleImage(imageId) {
         var x = document.getElementById(imageId);

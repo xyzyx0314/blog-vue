@@ -16,7 +16,6 @@
 </template>
 
 <script>
-
   import EventBus from '@/EventBus';
 
   export default {
@@ -28,9 +27,11 @@
     },
     created() {
       EventBus.on('loadPage', this.loadPage);
+      EventBus.on('reloadPage', this.reloadPage);
     },
     beforeUnmount() {
       EventBus.off('loadPage', this.loadPage);
+      EventBus.off('reloadPage', this.reloadPage);
     },
     methods: {
       handleClick(event) {
@@ -66,18 +67,22 @@
         }
       },
       loadPage(pageId) {
-        this.load();
-        this.xmlhttp.open("GET", "../../html/" + pageId + ".html", true);
-        this.xmlhttp.send();
-        if (pageId.startsWith('note/')) {
+        if (pageId.startsWith('note/') || pageId.startsWith('note')) {
           pageId = 'note';
+          EventBus.emit('show-note');
+          EventBus.emit('now-page', pageId);
+        } else {
+          this.load();
+          EventBus.emit('close-note', pageId);
+          this.xmlhttp.open("GET", "../../html/" + pageId + ".html", true);
+          this.xmlhttp.send();
+          this.xmlhttp2.open("GET", "../../html/" + pageId + "_list.html", true);
+          this.xmlhttp2.send();
         }
-        this.xmlhttp2.open("GET", "../../html/" + pageId + "_list.html", true);
-        this.xmlhttp2.send();
-      }
-    }, 
+      },
+    },
     mounted() {
-      this.loadPage('home');
+      this.loadPage('home'); 
     }
   }
 </script>
