@@ -86,7 +86,7 @@
       const currentUrl = window.location.href;
       // 获取前缀之后的内容
       console.log('当前的内容:', currentUrl);
-      const prefix = 'http://www.unmooredz.com/';
+      const prefix = 'http://www.unmooredz.com/?';
       const contentAfterPrefix = currentUrl.replace(prefix, '');
       // 合法路径列表
       const validPaths = ['blog/week3', 'acm/cf1820', 'blog/week1', 'blog/week2', 'blog/week4'];
