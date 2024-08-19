@@ -82,7 +82,24 @@
       },
     },
     mounted() {
-      this.loadPage('home'); 
+      // 获取当前网址
+      const currentUrl = window.location.href;
+      // 获取前缀之后的内容
+      const prefix = 'http://www.unmooredz.com/';
+      const contentAfterPrefix = currentUrl.replace(prefix, '');
+      // 合法路径列表
+      const validPaths = ['blog/week3', 'acm/cf1820', 'blog/week1', 'blog/week2', 'blog/week4'];
+
+      // 将内容显示在控制台中
+      this.loadPage(contentAfterPrefix);    
+      // 判断路径是否合法
+      const isValid = validPaths.includes(contentAfterPrefix);
+      // 将结果显示在控制台中
+      console.log('前缀之后的内容:', contentAfterPrefix);
+      console.log('是否合法:', isValid);
+
+      if (isValid) this.loadPage(contentAfterPrefix);    
+      else this.loadPage('home'); 
     }
   }
 </script>
