@@ -85,6 +85,7 @@
       // 获取当前网址
       const currentUrl = window.location.href;
       // 获取前缀之后的内容
+      console.log('当前的内容:', currentUrl);
       const prefix = 'http://www.unmooredz.com/';
       const contentAfterPrefix = currentUrl.replace(prefix, '');
       // 合法路径列表
