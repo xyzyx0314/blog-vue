@@ -1,6 +1,7 @@
 
 var btn = document.getElementById("btn");
 // var fnight=0;
+//
 // function night() {
 //   if (fnight==0){    
 //     document.documentElement.style.setProperty("--color1", "rgb(44, 48, 83)");
